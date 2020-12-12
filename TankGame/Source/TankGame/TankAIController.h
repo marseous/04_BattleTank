@@ -19,5 +19,5 @@ public:
 	void BeginPlay() override;
 
 	ATank* GetAIControlledTank() const;
-	
+	ATank* GetPlayerTank() const;
 };
