@@ -8,14 +8,11 @@ void ATankPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-
 }
 
 void ATankPlayerController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	//UE_LOG(LogTemp, Warning, TEXT("Tick"));
 
 	AimTowardsCrosshair();
 }
@@ -25,38 +22,37 @@ ATank* ATankPlayerController::GetControlledTank() const
 	return Cast<ATank>(GetPawn());
 }
 
-void ATankPlayerController::AimTowardsCrosshair()
+void ATankPlayerController::AimTowardsCrosshair() // Получаем координаты локации куда указывает прицел
 {
 	if (!GetControlledTank()) { return; }
 
 	FVector HitLocation;
-	if(GetSightRayHitLocation(HitLocation))
+	if(GetHitLocation(HitLocation))
 	{ 
-		//UE_LOG(LogTemp, Warning, TEXT("%s"), *HitLocation.ToString())
+		UE_LOG(LogTemp, Warning, TEXT("%s"), *HitLocation.ToString())
 	}
-
-
 }
 
-bool ATankPlayerController::GetSightRayHitLocation(FVector& HitLocation)
+bool ATankPlayerController::GetHitLocation(FVector& HitLocation)
 {
-	HitLocation = FVector(1.f, 1.f, 1.f);
 	int32 ViewportSizeX, ViewportSizeY;
 	GetViewportSize(ViewportSizeX, ViewportSizeY);
 
+	// Точка прицела на экране
 	FVector2D ScreenLocation(CrosshairXLocation * ViewportSizeX, CrosshairYLocation * ViewportSizeY);
 
-	FVector LookDirection;
-	if (GetLookDirection(ScreenLocation, LookDirection))
+	// Координаты направления прицела
+	FVector LookDirection; 
+	if (AimCoordinatesToWorld(ScreenLocation, LookDirection))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *LookDirection.ToString())
+		GetHitCoordinates(LookDirection, HitLocation);
 	}
-
 
 	return true;
 }
 
-bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection)
+// Проицирование прицела в мир и получени координат направления
+bool ATankPlayerController::AimCoordinatesToWorld(FVector2D ScreenLocation, FVector& LookDirection)
 {
 	FVector WorldLocation;
 	return DeprojectScreenPositionToWorld(
@@ -65,6 +61,24 @@ bool ATankPlayerController::GetLookDirection(FVector2D ScreenLocation, FVector& 
 		WorldLocation,
 		LookDirection
 	);
+}
 
-	
+bool ATankPlayerController::GetHitCoordinates(FVector AimDirection, FVector &HitLocation)
+{
+	FHitResult HitResult;
+	auto StartLocation = PlayerCameraManager->GetCameraLocation();
+	auto EndLocation = StartLocation + (AimDirection * LineTraceLength);
+	if (GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		StartLocation,
+		EndLocation,
+		ECollisionChannel::ECC_Visibility)
+		)
+	{
+		HitLocation = HitResult.Location;
+
+		return true;
+	}
+
+	return false;
 }

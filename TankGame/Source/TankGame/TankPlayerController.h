@@ -23,10 +23,12 @@ public:
 	void Tick(float DeltaTime) override;
 
 	void AimTowardsCrosshair();
-	bool GetSightRayHitLocation(FVector &HitLocation);
-	bool GetLookDirection(FVector2D ScreenLocation, FVector& LookDirection);
+	bool GetHitLocation(FVector &HitLocation);
+	bool AimCoordinatesToWorld(FVector2D ScreenLocation, FVector& LookDirection);
+	bool GetHitCoordinates(FVector LookDirection, FVector& HitLocation);
 
 	UPROPERTY(EditAnywhere)		float CrosshairXLocation = 0.5f;
 	UPROPERTY(EditAnywhere)		float CrosshairYLocation = 0.3333f;
+								float LineTraceLength = 10000.f;
 
 };
