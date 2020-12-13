@@ -29,7 +29,8 @@ void ATankPlayerController::AimTowardsCrosshair() // Получаем координаты локации
 	FVector HitLocation;
 	if(GetHitLocation(HitLocation))
 	{ 
-		UE_LOG(LogTemp, Warning, TEXT("%s"), *HitLocation.ToString())
+		GetControlledTank()->AimAt(HitLocation);
+		//UE_LOG(LogTemp, Warning, TEXT("%s"), *HitLocation.ToString())
 	}
 }
 
