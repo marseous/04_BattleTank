@@ -14,24 +14,6 @@ UTankAimingComponent::UTankAimingComponent()
 }
 
 
-// Called when the game starts
-void UTankAimingComponent::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// ...
-	
-}
-
-
-// Called every frame
-void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 void UTankAimingComponent::SetBarrelReference(UStaticMeshComponent* BarrelToSet)
 {
 	Barrel = BarrelToSet;
@@ -43,19 +25,28 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 	if (!Barrel) { return; }
 
 	FVector OutTossVelocity;
-	if (UGameplayStatics::SuggestProjectileVelocity(
+	bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
 		this,
 		OutTossVelocity,
 		Barrel->GetSocketLocation("Projectile"),
 		HitLocation,
 		LaunchSpeed,
-		false,
-		0,
-		0,
-		ESuggestProjVelocityTraceOption::TraceFullPath
-	))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Firing at %s"), *OutTossVelocity.GetSafeNormal().ToString())
+		ESuggestProjVelocityTraceOption::DoNotTrace
+	);
 
+	if(bHaveAimSolution)
+	{
+		MoveBarrelTowards(OutTossVelocity);
 	}
+}
+
+	// заставить башню следовать за y координатами прицела
+void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
+{
+	auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+	auto AimAsRotator = AimingDirection.Rotation();
+	auto DeltaRotation = AimAsRotator - BarrelRotator;
+
+	UE_LOG(LogTemp, Warning, TEXT("DeltaRotation %s"), *DeltaRotation.ToString())
+
 }
