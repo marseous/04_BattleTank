@@ -31,12 +31,22 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 		Barrel->GetSocketLocation("Projectile"),
 		HitLocation,
 		LaunchSpeed,
+		false,
+		0,
+		0,
 		ESuggestProjVelocityTraceOption::DoNotTrace
 	);
 
 	if(bHaveAimSolution)
 	{
 		MoveBarrelTowards(OutTossVelocity);
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f Solution found"), Time)
+	}
+	else
+	{
+		auto Time = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("%f Solution NOT found"), Time)
 	}
 }
 
@@ -47,6 +57,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimingDirection)
 	auto AimAsRotator = AimingDirection.Rotation();
 	auto DeltaRotation = AimAsRotator - BarrelRotator;
 
-	UE_LOG(LogTemp, Warning, TEXT("DeltaRotation %s"), *DeltaRotation.ToString())
+	//UE_LOG(LogTemp, Warning, TEXT("DeltaRotation %s"), *DeltaRotation.ToString())
 
 }

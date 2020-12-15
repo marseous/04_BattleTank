@@ -28,7 +28,6 @@ protected:
 	UTankAimingComponent* AimingComponent = nullptr;
 
 	virtual void BeginPlay() override;
-	virtual void Tick(float DeltaTime) override;
 
 private:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;

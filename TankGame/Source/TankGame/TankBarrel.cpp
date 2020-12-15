@@ -4,7 +4,6 @@
 #include "TankBarrel.h"
 
 
-void UTankBarrel::Elevate(float Degree)
+void UTankBarrel::Elevate(float RelativeSpeed)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Elevate to %f degrees"), Degree)
 }
