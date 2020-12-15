@@ -4,13 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "TankGame.h"
-#include "Tank.h"
 #include "GameFramework/PlayerController.h"
 #include "TankPlayerController.generated.h"
 
-/**
- * 
- */
+class ATank;
+
+
 UCLASS()
 class TANKGAME_API ATankPlayerController : public APlayerController
 {

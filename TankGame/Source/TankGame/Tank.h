@@ -24,8 +24,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")	
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
-	UPROPERTY(EditAnywhere, Category = "Firing")
-	float LaunchSpeed = 40000.f;
+	UPROPERTY(EditAnywhere, Category = "Fire")		float LaunchSpeed = 40000.f;
 protected:
 	UTankAimingComponent* AimingComponent = nullptr;
 
