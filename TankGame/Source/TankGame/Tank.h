@@ -25,7 +25,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Setup")	
 	void SetBarrelReference(UTankBarrel* BarrelToSet);
 
-	UPROPERTY(EditAnywhere, Category = "Fire")		float LaunchSpeed = 40000.f;
+	UFUNCTION(BlueprintCallable, Category = "Setup")
+	void SetTurretReference(UTankTurret* TurretToSet);
+
+	UPROPERTY(EditAnywhere, Category = "Fire")		
+	float LaunchSpeed = 8000.f;
+
 protected:
 	UTankAimingComponent* AimingComponent = nullptr;
 
