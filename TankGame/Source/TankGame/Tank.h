@@ -7,6 +7,7 @@
 #include "GameFramework/Pawn.h"
 #include "Tank.generated.h"
 
+class UTankTurret;
 class UTankBarrel;
 class UTankAimingComponent;
 
